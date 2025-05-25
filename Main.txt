@@ -165,6 +165,14 @@ Tabs.Outros:AddButton({
     end
 })
 
+Tabs.Outros:AddButton({
+    Title = "Arma de Portais",
+    Description = "Essa arma é de teleportar pra locais",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Shadow6698/Arma-de-portais-/main/Main.txt", true))()
+    end
+})
+
 -- Brookhaven
 Tabs.Brookhaven:AddButton({
     Title = "Gumball Hub",
