@@ -13,7 +13,7 @@ local Window = Fluent:CreateWindow({
     Visible = true,
 })
 
--- Criar abas (sem Plugins e ScriptsExtras)
+-- Criar abas
 local Tabs = {
     Creditos = Window:AddTab({ Title = "Créditos", Icon = "heart" }),
     Scripts = Window:AddTab({ Title = "Scripts", Icon = "code" }),
@@ -170,6 +170,14 @@ Tabs.Outros:AddButton({
     Description = "Essa arma é de teleportar pra locais",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Shadow6698/Arma-de-portais-/main/Main.txt", true))()
+    end
+})
+
+Tabs.Outros:AddButton({
+    Title = "Buraco Negro Tool",
+    Description = "Ferramenta de buraco negro (Natural Disaster)",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Natural-Disaster-Survival-Blackhole-Tool-Control-Unanc*d-Parts-27791"))()
     end
 })
 
