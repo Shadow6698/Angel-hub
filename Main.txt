@@ -1,29 +1,34 @@
--- Carregar a biblioteca Osmium
-local success, library = pcall(loadstring(game:HttpGet("https://raw.githubusercontent.com/TrixAde/Osmium/main/OsmiumLibrary.lua")))
-if not success then
-    warn("Falha ao carregar a biblioteca Osmium.")
-    return
-end
+-- Carregar biblioteca Fluent
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local version = "2.0"
 
--- Criar a janela principal com cores personalizadas
-local window = library:CreateWindow("Angels Hub 2.0", {
-    BackgroundColor = Color3.fromRGB(255, 0, 0), -- Vermelho
-    TextColor = Color3.fromRGB(255, 255, 255)    -- Branco
+-- Criar janela principal
+local Window = Fluent:CreateWindow({
+    Title = "Angels hub " .. version,
+    SubTitle = "by nightmare",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    Visible = true,
 })
 
 -- Criar abas
 local Tabs = {
-    Creditos = window:CreateTab("Créditos"),
-    Scripts = window:CreateTab("Scripts"),
-    DeadRealls = window:CreateTab("Dead Realls [Trilhos Mortos]"),
-    Comandos = window:CreateTab("Scripts de Comandos"),
-    BloxFruits = window:CreateTab("Blox Fruits"),
-    Outros = window:CreateTab("Outros"),
-    Brookhaven = window:CreateTab("Brookhaven")
+    Creditos = Window:AddTab({ Title = "Créditos", Icon = "heart" }),
+    Scripts = Window:AddTab({ Title = "Scripts", Icon = "code" }),
+    DeadRealls = Window:AddTab({ Title = "Dead Realls [Trilhos Mortos]", Icon = "skull" }),
+    Comandos = Window:AddTab({ Title = "Scripts de Comandos", Icon = "terminal" }),
+    BloxFruits = Window:AddTab({ Title = "Blox Fruits", Icon = "swords" }),
+    Outros = Window:AddTab({ Title = "Outros", Icon = "grid" }),
+    Brookhaven = Window:AddTab({ Title = "Brookhaven", Icon = "home" })
 }
 
 -- Créditos
-Tabs.Creditos:CreateLabel("Créditos", "Script feito por:\nNightmare e Julia")
+Tabs.Creditos:AddParagraph({
+    Title = "Créditos",
+    Content = "Script feito por:\nNightmare e julia"
+})
 
 -- Scripts principais
 local scripts = {
@@ -53,9 +58,13 @@ local scripts = {
 }
 
 for _, script in ipairs(scripts) do
-    Tabs.Scripts:CreateButton(script[1], function()
-        loadstring(game:HttpGet(script[2]))()
-    end)
+    Tabs.Scripts:AddButton({
+        Title = script[1],
+        Description = script[3] or "Clique para executar",
+        Callback = function()
+            loadstring(game:HttpGet(script[2]))()
+        end
+    })
 end
 
 -- Scripts de comandos/admins
@@ -68,32 +77,56 @@ local comandos = {
 }
 
 for _, script in ipairs(comandos) do
-    Tabs.Comandos:CreateButton(script[1], function()
-        loadstring(game:HttpGet(script[2]))()
-    end)
+    Tabs.Comandos:AddButton({
+        Title = script[1],
+        Description = "Painel/Admin de comandos",
+        Callback = function()
+            loadstring(game:HttpGet(script[2]))()
+        end
+    })
 end
 
 -- Aba Dead Realls
-Tabs.DeadRealls:CreateButton("Hub 1", function()
-    local script_key = "PASTEKEYHERE"
-    (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()
-end)
+Tabs.DeadRealls:AddButton({
+    Title = "Hub 1",
+    Description = "Script com chave (key system)",
+    Callback = function()
+        local script_key = "PASTEKEYHERE"
+        (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()
+    end
+})
 
-Tabs.DeadRealls:CreateButton("Hub 2", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))()
-end)
+Tabs.DeadRealls:AddButton({
+    Title = "Hub 2",
+    Description = "Than Hub v1",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))()
+    end
+})
 
-Tabs.DeadRealls:CreateButton("Hub 3", function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/DonjoScripts/Public-Scripts/refs/heads/Slap-Battles/TheFastestBondStealer.lua'))()
-end)
+Tabs.DeadRealls:AddButton({
+    Title = "Hub 3",
+    Description = "The Fastest Bond Stealer",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/DonjoScripts/Public-Scripts/refs/heads/Slap-Battles/TheFastestBondStealer.lua'))()
+    end
+})
 
-Tabs.DeadRealls:CreateButton("Hub 4", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/thaibao/refs/heads/main/TbaoHubDeadRails"))()
-end)
+Tabs.DeadRealls:AddButton({
+    Title = "Hub 4",
+    Description = "Tbao Hub Dead Rails",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/thaibao/refs/heads/main/TbaoHubDeadRails"))()
+    end
+})
 
-Tabs.DeadRealls:CreateButton("Hub 5", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mrpopcatfrombupge/FernHub/refs/heads/main/DeadRailsFarm", true))()
-end)
+Tabs.DeadRealls:AddButton({
+    Title = "Hub 5",
+    Description = "FernHub DeadRailsFarm",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mrpopcatfrombupge/FernHub/refs/heads/main/DeadRailsFarm", true))()
+    end
+})
 
 -- Scripts para Blox Fruits
 local bloxFruitsScripts = {
@@ -106,49 +139,93 @@ local bloxFruitsScripts = {
 }
 
 for _, script in ipairs(bloxFruitsScripts) do
-    Tabs.BloxFruits:CreateButton(script[1], function()
-        loadstring(game:HttpGet(script[2]))()
-    end)
+    Tabs.BloxFruits:AddButton({
+        Title = script[1],
+        Description = script[3] or "Clique para executar",
+        Callback = function()
+            loadstring(game:HttpGet(script[2]))()
+        end
+    })
 end
 
 -- Aba Outros
-Tabs.Outros:CreateButton("Angel Executor", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Shadow6698/Executor-script/main/Main.txt"))()
-end)
+Tabs.Outros:AddButton({
+    Title = "Angel Executor",
+    Description = "Executor Angel incorporado",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Shadow6698/Executor-script/main/Main.txt"))()
+    end
+})
 
-Tabs.Outros:CreateButton("Sky Hub", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/yofriendfromschool1/Sky-Hub/main/FE%20Trolling%20GUI.luau"))()
-end)
+Tabs.Outros:AddButton({
+    Title = "Sky Hub",
+    Description = "Sky Hub FE Trolling GUI",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/yofriendfromschool1/Sky-Hub/main/FE%20Trolling%20GUI.luau"))()
+    end
+})
 
-Tabs.Outros:CreateButton("Arma de Portais", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Shadow6698/Arma-de-portais-/main/Main.txt", true))()
-end)
+Tabs.Outros:AddButton({
+    Title = "Arma de Portais",
+    Description = "Essa arma é de teleportar pra locais",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Shadow6698/Arma-de-portais-/main/Main.txt", true))()
+    end
+})
 
-Tabs.Outros:CreateButton("Buraco Negro Tool", function()
-    loadstring(game:HttpGet("https://rawscripts.net/raw/Natural-Disaster-Survival-Blackhole-Tool-Control-Unanc*d-Parts-27791"))()
-end)
+Tabs.Outros:AddButton({
+    Title = "Buraco Negro Tool",
+    Description = "Ferramenta de buraco negro (Natural Disaster)",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Natural-Disaster-Survival-Blackhole-Tool-Control-Unanc*d-Parts-27791"))()
+    end
+})
 
 -- Brookhaven
-Tabs.Brookhaven:CreateButton("Gumball Hub", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/JaozinScripts/Gumball-Hub/refs/heads/main/GumballHubRetorn2.1.1.1.lua"))()
-end)
+Tabs.Brookhaven:AddButton({
+    Title = "Gumball Hub",
+    Description = "Gumball Hub Brookhaven",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/JaozinScripts/Gumball-Hub/refs/heads/main/GumballHubRetorn2.1.1.1.lua"))()
+    end
+})
 
-Tabs.Brookhaven:CreateButton("Sander X", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/sXPiterXs1111/Sanderxv3.30/main/sanderx3.30"))()
-end)
+Tabs.Brookhaven:AddButton({
+    Title = "Sander X",
+    Description = "Sander X v3.30",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/sXPiterXs1111/Sanderxv3.30/main/sanderx3.30"))()
+    end
+})
 
-Tabs.Brookhaven:CreateButton("Chaos Hub", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Luscaa22/Calabocaa/refs/heads/main/ChaosHub"))()
-end)
+Tabs.Brookhaven:AddButton({
+    Title = "Chaos Hub",
+    Description = "Chaos Hub Brookhaven",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Luscaa22/Calabocaa/refs/heads/main/ChaosHub"))()
+    end
+})
 
-Tabs.Brookhaven:CreateButton("Rael Hub", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Laelmano24/Rael-Hub/main/main.txt"))()
-end)
+Tabs.Brookhaven:AddButton({
+    Title = "Rael Hub",
+    Description = "Rael Hub Brookhaven",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Laelmano24/Rael-Hub/main/main.txt"))()
+    end
+})
 
-Tabs.Brookhaven:CreateButton("Shadow Hub", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/realgengar/scripts/refs/heads/main/Gui%20Version.Lua"))()
-end)
+Tabs.Brookhaven:AddButton({
+    Title = "Shadow Hub",
+    Description = "Shadow Hub Brookhaven",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/realgengar/scripts/refs/heads/main/Gui%20Version.Lua"))()
+    end
+})
 
-Tabs.Brookhaven:CreateButton("Speed Wave", function()
-    loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-SPEED-WAVE-English-28849"))()
-end)
+Tabs.Brookhaven:AddButton({
+    Title = "Speed Wave",
+    Description = "Speed Wave Brookhaven",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-SPEED-WAVE-English-28849"))()
+    end
+})
