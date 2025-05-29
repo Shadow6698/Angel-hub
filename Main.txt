@@ -1,8 +1,6 @@
--- Carregar biblioteca Fluent
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local version = "2.0"
 
--- Criar janela principal
 local Window = Fluent:CreateWindow({
     Title = "Angels hub " .. version,
     SubTitle = "by nightmare",
@@ -13,7 +11,6 @@ local Window = Fluent:CreateWindow({
     Visible = true,
 })
 
--- Criar abas
 local Tabs = {
     Creditos = Window:AddTab({ Title = "Créditos", Icon = "heart" }),
     Scripts = Window:AddTab({ Title = "Scripts", Icon = "code" }),
@@ -24,13 +21,12 @@ local Tabs = {
     Brookhaven = Window:AddTab({ Title = "Brookhaven", Icon = "home" })
 }
 
--- Créditos
 Tabs.Creditos:AddParagraph({
     Title = "Créditos",
     Content = "Script feito por:\nNightmare e julia"
 })
 
--- Scripts principais
+-- Scripts principais com pesquisa
 local scripts = {
     {"Fê Emotes",       "https://scriptblox.com/raw/Brookhaven-RP-all-emotes-6849"},
     {"Ghost Hub",       "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/GhostHub"},
@@ -57,6 +53,16 @@ local scripts = {
     {"Chaos Hub",       "https://raw.githubusercontent.com/Luscaa22/Calabocaa/refs/heads/main/ChaosHub"},
 }
 
+-- Campo de pesquisa
+local searchBox = Tabs.Scripts:AddInput("SearchScripts", {
+    Title = "Pesquisar Script",
+    Default = "",
+    Placeholder = "Digite parte do nome...",
+    Numeric = false,
+    Finished = false,
+    Callback = function() end -- apenas decorativo
+})
+
 for _, script in ipairs(scripts) do
     Tabs.Scripts:AddButton({
         Title = script[1],
@@ -67,7 +73,7 @@ for _, script in ipairs(scripts) do
     })
 end
 
--- Scripts de comandos/admins
+-- Scripts comandos/admins
 local comandos = {
     {"Nameless Admin", "https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/Source.lua"},
     {"Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
@@ -181,51 +187,49 @@ Tabs.Outros:AddButton({
     end
 })
 
+Tabs.Outros:AddButton({
+    Title = "Rejoin",
+    Description = "Reconectar ao servidor atual",
+    Callback = function()
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+    end
+})
+
+Tabs.Outros:AddButton({
+    Title = "Server Hop",
+    Description = "Entrar em outro servidor aleatório",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        local HttpService = game:GetService("HttpService")
+        local PlaceId = game.PlaceId
+
+        local servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..PlaceId.."/servers/Public?sortOrder=Desc&limit=100")).data
+        for _, server in pairs(servers) do
+            if server.playing < server.maxPlayers then
+                TeleportService:TeleportToPlaceInstance(PlaceId, server.id)
+                break
+            end
+        end
+    end
+})
+
 -- Brookhaven
-Tabs.Brookhaven:AddButton({
-    Title = "Gumball Hub",
-    Description = "Gumball Hub Brookhaven",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/JaozinScripts/Gumball-Hub/refs/heads/main/GumballHubRetorn2.1.1.1.lua"))()
-    end
-})
+local brookhavenScripts = {
+    {"Gumball Hub", "https://raw.githubusercontent.com/JaozinScripts/Gumball-Hub/refs/heads/main/GumballHubRetorn2.1.1.1.lua"},
+    {"Sander X", "https://raw.githubusercontent.com/sXPiterXs1111/Sanderxv3.30/main/sanderx3.30"},
+    {"Chaos Hub", "https://raw.githubusercontent.com/Luscaa22/Calabocaa/refs/heads/main/ChaosHub"},
+    {"Rael Hub", "https://raw.githubusercontent.com/Laelmano24/Rael-Hub/main/main.txt"},
+    {"Shadow Hub", "https://raw.githubusercontent.com/realgengar/scripts/refs/heads/main/Gui%20Version.Lua"},
+    {"Speed Wave", "https://rawscripts.net/raw/Brookhaven-RP-SPEED-WAVE-English-28849"},
+    {"Duplicator Carros", "https://raw.githubusercontent.com/kigredns/Flame-Object/refs/heads/main/script.lua"}
+}
 
-Tabs.Brookhaven:AddButton({
-    Title = "Sander X",
-    Description = "Sander X v3.30",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/sXPiterXs1111/Sanderxv3.30/main/sanderx3.30"))()
-    end
-})
-
-Tabs.Brookhaven:AddButton({
-    Title = "Chaos Hub",
-    Description = "Chaos Hub Brookhaven",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Luscaa22/Calabocaa/refs/heads/main/ChaosHub"))()
-    end
-})
-
-Tabs.Brookhaven:AddButton({
-    Title = "Rael Hub",
-    Description = "Rael Hub Brookhaven",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Laelmano24/Rael-Hub/main/main.txt"))()
-    end
-})
-
-Tabs.Brookhaven:AddButton({
-    Title = "Shadow Hub",
-    Description = "Shadow Hub Brookhaven",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/realgengar/scripts/refs/heads/main/Gui%20Version.Lua"))()
-    end
-})
-
-Tabs.Brookhaven:AddButton({
-    Title = "Speed Wave",
-    Description = "Speed Wave Brookhaven",
-    Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-SPEED-WAVE-English-28849"))()
-    end
-})
+for _, script in ipairs(brookhavenScripts) do
+    Tabs.Brookhaven:AddButton({
+        Title = script[1],
+        Description = "Clique para executar",
+        Callback = function()
+            loadstring(game:HttpGet(script[2]))()
+        end
+    })
+end
